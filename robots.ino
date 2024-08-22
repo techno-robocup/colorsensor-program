@@ -1,4 +1,18 @@
 #define _DEBUG
+/*
+ESP
+i2c pins
+SDA 21
+SCL 22
+
+EV3
+white->none
+black->none
+red->GND
+green->vcc
+yellow->SCL
+blue->SDA
+*/
 constexpr uint8_t red = 32;
 constexpr uint8_t green = 26;
 constexpr uint8_t blue = 25;
