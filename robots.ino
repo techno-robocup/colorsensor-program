@@ -21,12 +21,14 @@ constexpr uint8_t light2 = 4;
 constexpr uint8_t light3 = 34;
 constexpr uint8_t light4 = 35;
 constexpr uint8_t light5 = 12;
-void lightup(uint8_t r, uint8_t g, uint8_t b);
+constexpr uint8_t light6 = 27;
+constexpr uint8_t light7 = 14;
+inline void lightup(uint8_t r, uint8_t g, uint8_t b);
 template <class T>
-void DP(T a);
+inline void DP(T a);
 
 template <class T>
-void DPln(T a);
+inline void DPln(T a);
 
 void setup() {
 #ifdef _DEBUG
@@ -41,18 +43,20 @@ void setup() {
   pinMode(light3, INPUT);
   pinMode(light4, INPUT);
   pinMode(light5, INPUT);
+  pinMode(light6, INPUT);
+  pinMode(light7, INPUT);
 }
 
 void loop() {
-  DPln("RED");
-  lightup(HIGH, LOW, LOW);
-  delay(1000);
-  DPln("GREEN");
-  lightup(LOW, HIGH, LOW);
-  delay(1000);
-  DPln("BLUE");
-  lightup(LOW, LOW, HIGH);
-  delay(1000);
+  // DPln("RED");
+  // lightup(HIGH, LOW, LOW);
+  // delay(1000);
+  // DPln("GREEN");
+  // lightup(LOW, HIGH, LOW);
+  // delay(1000);
+  // DPln("BLUE");
+  // lightup(LOW, LOW, HIGH);
+  // delay(1000);
   DP("1: ");
   DPln(analogRead(light1));
   DP("2: ");
@@ -63,22 +67,28 @@ void loop() {
   DPln(analogRead(light4));
   DP("5: ");
   DPln(analogRead(light5));
+  DP("6: ");
+  DPln(analogRead(light6));
+  DP("7: ");
+  DPln(analogRead(light7));
   delay(500);
 }
-void lightup(uint8_t r, uint8_t g, uint8_t b){
+inline void lightup(uint8_t r, uint8_t g, uint8_t b){
   digitalWrite(red, r);
   digitalWrite(green, g);
   digitalWrite(blue, b);
 }
 template <class T>
-void DP(T a){
+inline void DP(T a){
 #ifdef _DEBUG
   Serial.print(a);
 #endif
+  return;
 }
 template <class T>
-void DPln(T a){
+inline void DPln(T a){
 #ifdef _DEBUG
   Serial.println(a);
 #endif
+  return;
 }
