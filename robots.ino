@@ -1,4 +1,12 @@
+#include <EEPROM.h>
+#include <Wire.h>
 #define _DEBUG
+#ifdef _DEBUG
+#define DP(x)   \
+Serial.print(x);
+#define DPln(x) \
+Serial.println(x)
+#endif // _DEBUG
 /*
 ESP
 i2c pins
@@ -23,12 +31,18 @@ constexpr uint8_t light4 = 35;
 constexpr uint8_t light5 = 12;
 constexpr uint8_t light6 = 27;
 constexpr uint8_t light7 = 14;
+constexpr uint8_t waittime=600;
 inline void lightup(uint8_t r, uint8_t g, uint8_t b);
-template <class T>
-inline void DP(T a);
-
-template <class T>
-inline void DPln(T a);
+inline void i2cSendEvent();
+uint8_t colordata[7][3];
+#define getdata(x)                  \
+colordata[0][x]=analogRead(light1); \
+colordata[1][x]=analogRead(light2); \
+colordata[2][x]=analogRead(light3); \
+colordata[3][x]=analogRead(light4); \
+colordata[4][x]=analogRead(light5); \
+colordata[5][x]=analogRead(light6); \
+colordata[6][x]=analogRead(light7);
 
 void setup() {
 #ifdef _DEBUG
@@ -45,50 +59,29 @@ void setup() {
   pinMode(light5, INPUT);
   pinMode(light6, INPUT);
   pinMode(light7, INPUT);
+	Wire.onRequest(i2cSendEvent);
 }
 
+
 void loop() {
-  // DPln("RED");
-  // lightup(HIGH, LOW, LOW);
-  // delay(1000);
-  // DPln("GREEN");
-  // lightup(LOW, HIGH, LOW);
-  // delay(1000);
-  // DPln("BLUE");
-  // lightup(LOW, LOW, HIGH);
-  // delay(1000);
-  DP("1: ");
-  DPln(analogRead(light1));
-  DP("2: ");
-  DPln(analogRead(light2));
-  DP("3: ");
-  DPln(analogRead(light3));
-  DP("4: ");
-  DPln(analogRead(light4));
-  DP("5: ");
-  DPln(analogRead(light5));
-  DP("6: ");
-  DPln(analogRead(light6));
-  DP("7: ");
-  DPln(analogRead(light7));
-  delay(500);
+  DPln("RED");
+  lightup(HIGH, LOW, LOW);
+  getdata(0);
+  delay(waittime);
+  DPln("GREEN");
+  lightup(LOW, HIGH, LOW);
+  getdata(1)
+  delay(waittime);
+  DPln("BLUE");
+  lightup(LOW, LOW, HIGH);
+  getdata(2);
+  delay(waittime);
 }
 inline void lightup(uint8_t r, uint8_t g, uint8_t b){
   digitalWrite(red, r);
   digitalWrite(green, g);
   digitalWrite(blue, b);
 }
-template <class T>
-inline void DP(T a){
-#ifdef _DEBUG
-  Serial.print(a);
-#endif
-  return;
-}
-template <class T>
-inline void DPln(T a){
-#ifdef _DEBUG
-  Serial.println(a);
-#endif
-  return;
+inline void i2cSendEvent(){
+	Wire.write(colordata, sizeof(colordata));
 }
